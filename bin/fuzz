@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+
+
+import doctest
+import inspect
+import os
+import shutil
+import sys
+import unittest
+
+
+sys.path.insert(0, os.getcwd())
+
+
+import atheris
+
+
+with atheris.instrument_imports():
+
+    from op import Object, keys, values
+    from op.command import Command
+    from op.kernel import Config, boot
+    from op.function import cdir, format
+    from op.parse import parse
+    from op.table import Table
+
+
+    import op.all
+
+
+flags = doctest.REPORT_NDIFF | doctest.FAIL_FAST | doctest.ELLIPSIS
+results = []
+
+
+def readdir(d, pn="mods"):
+    if not os.path.exists(d):
+        return
+    for mn in os.listdir(d):
+        if not mn.endswith(".py"):
+            continue
+        if "__" in mn:
+            continue
+        mnn = mn[:-3]
+        mod = __import__("%s.%s" % (pn, mnn))
+        Table.add(mod)
+
+
+def main(*args, **kwargs):
+    if os.path.exists(Config.workdir):
+        shutil.rmtree(Config.workdir)
+    boot(" ".join(sys.argv[1:]))
+    cdir(".test")
+    Config.debug = True
+    Config.verbose = True
+    Config.workdir = ".test"
+    readdir("mods")
+    pat = "test_%s*" % "*"
+    suite = unittest.loader.TestLoader().discover("test", pattern=pat)
+    unittest.TextTestRunner(verbosity=3).run(suite)
+
+
+atheris.Setup(sys.argv, main)
+atheris.Fuzz()

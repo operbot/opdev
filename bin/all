@@ -1,0 +1,6 @@
+# This file is placed in the Public Domain
+
+bin/build
+bin/test
+#bin/docs
+bin/env

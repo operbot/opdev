@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+
+
+"check for nono's"
+
+
+import os
+
+
+todos = [
+         "__import__",
+         "__main__",
+         "__version__",
+         '"## "',
+         "popen",
+         "pkgutil",
+         "importlib",
+         "print",
+         "sys",
+         "traceback"
+        ]
+
+
+skip = [
+        ".git",
+        "README",
+        "grep",
+        "build",
+        "check",
+        "dev",
+        "printable",
+        "bin/op"
+       ]
+
+
+TXT  = "grep -s -R %s src"
+
+
+def doskip(txt):
+    for name in skip:
+        if name in txt:
+            return True
+    return False
+
+
+def main():
+    for todo in todos:
+        greptxt = TXT % todo
+        for line in os.popen(greptxt).readlines():
+            try:
+                fnm, _liner = line.split(":")
+                if fnm.endswith("~"):
+                    continue
+                if doskip(line):
+                    continue
+                print(line.rstrip())
+            except ValueError:
+                pass
+
+
+main()

@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+
+
+"loop over directories and exec a string in them"
+
+
+import os
+import sys
+
+
+def popen(txt, descr="", latest=False):
+    last = ""
+    for line in os.popen(txt).readlines():
+        ln1 = line.strip() 
+        if not latest and ln1:
+            print(ln1)
+        elif ln1:
+            last = ln1
+    if last:
+        t = descr + " " + last
+        print(t.strip())
+    
+
+def main():
+    for fnn in os.listdir("src"):
+        os.chdir("src/%s" % fnn)
+        popen(" ".join(sys.argv[1:]), fnn, True)
+        os.chdir("..")
+        os.chdir("..")
+
+main()
