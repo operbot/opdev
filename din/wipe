@@ -12,4 +12,4 @@ def popen(txt):
 
 
 popen("din/clean")
-popen("rm -fR env")
+popen("rm -fR env src tar")
