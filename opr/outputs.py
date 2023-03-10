@@ -6,8 +6,8 @@ import textwrap
 import threading
 
 
-from .objects import Object
-from .threads import launch
+from opv.objects import Object
+from opr.threads import launch
 
 
 class TextWrap(textwrap.TextWrapper):

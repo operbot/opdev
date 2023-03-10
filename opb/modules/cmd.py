@@ -8,10 +8,10 @@ import threading
 import time
 
 
-from ..command import Command
-from ..listens import Listens
-from ..objects import Object, oid, update
-from ..utility import elapsed
+from opr.command import Command
+from opr.listens import Listens
+from opv.objects import Object, oid, update
+from opr.utility import elapsed
 
 
 def __dir__():

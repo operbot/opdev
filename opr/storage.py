@@ -10,10 +10,10 @@ import pathlib
 import _thread
 
 
-from .decoder import ObjectDecoder
-from .encoder import ObjectEncoder
-from .objects import Object, items, oid, otype, search, update
-from .utility import fnclass, fntime, locked
+from opv.decoder import ObjectDecoder
+from opv.encoder import ObjectEncoder
+from opv.objects import Object, items, oid, otype, search, update
+from opr.utility import fnclass, fntime, locked
 
 
 def __dir__():

@@ -4,14 +4,13 @@
 "object programming version"
 
 
-from . import decoder, encoder, objects, storage
+from . import decoder, encoder, objects
 
 
 from .decoder import load, loads
 from .encoder import dump, dumps
-from .objects import Object, format, items, keys, kind, oid
+from .objects import Object, items, keys, oid, otype, tostr
 from .objects import search, update, values
-from .storage import *
 
 
 def __dir__():
@@ -20,12 +19,10 @@ def __dir__():
             'format',
             'items',
             'keys',
-            'kind',
             'oid',
+            'otype',
             'search',
+            'tostr',
             'update',
             'values'
            )
-
-
-__all__ = __dir__()

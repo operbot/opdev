@@ -4,11 +4,11 @@
 'clients'
 
 
-from .command import Command
-from .handler import Handler
-from .listens import Listens
-from .message import Message
-from .threads import launch
+from opr.command import Command
+from opr.handler import Handler
+from opr.listens import Listens
+from opr.message import Message
+from opr.threads import launch
 
 
 def __dir__():

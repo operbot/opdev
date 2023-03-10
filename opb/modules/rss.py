@@ -17,12 +17,12 @@ from urllib.parse import quote_plus, urlencode
 from urllib.request import Request, urlopen
 
 
-from ..listens import Listens
-from ..objects import Object, kind, tostr, update
-from ..utility import fntime, locked
-from ..threads import launch
-from ..storage import Storage
-from ..utility import elapsed, spl
+from opr.listens import Listens
+from opv.objects import Object, otype, tostr, update
+from opr.utility import fntime, locked
+from opr.threads import launch
+from opr.storage import Storage, find, last, save
+from opr.utility import elapsed, spl
 
 
 def __dir__():
@@ -135,10 +135,10 @@ class Fetcher(Object):
                 Fetcher.seen.urls.append(uurl)
             counter += 1
             if self.dosave:
-                Storage.save(fed)
+                save(fed)
             objs.append(fed)
         if objs:
-            Storage.save(Fetcher.seen)
+            save(Fetcher.seen)
         txt = ""
         feedname = getattr(feed, "name")
         if feedname:
@@ -150,12 +150,12 @@ class Fetcher(Object):
 
     def run(self):
         thrs = []
-        for _fn, feed in Storage.find("rss"):
+        for _fn, feed in find("rss"):
             thrs.append(launch(self.fetch, feed))
         return thrs
 
     def start(self, repeat=True):
-        Storage.last(Fetcher.seen)
+        last(Fetcher.seen)
         if repeat:
             repeater = Repeater(300.0, self.run)
             repeater.start()
@@ -198,7 +198,7 @@ class Timer:
         self.args = args
         self.func = func
         self.sleep = sleep
-        self.name = thrname or kind(self.func, True)
+        self.name = thrname or otype(self.func, True)
         self.state = Object()
         self.timer = None
 
@@ -289,10 +289,10 @@ def dpl(event):
         event.reply("dpl <stringinurl> <item1,item2>")
         return
     setter = {"display_list": event.args[1]}
-    for fnm, feed in Storage.find("rss", {"rss": event.args[0]}):
+    for fnm, feed in find("rss", {"rss": event.args[0]}):
         if feed:
             update(feed, setter)
-            Storage.save(feed, fnm)
+            save(feed, fnm)
     event.reply("ok")
 
 
@@ -314,10 +314,10 @@ def nme(event):
         event.reply("name <stringinurl> <name>")
         return
     selector = {"rss": event.args[0]}
-    for fnm, feed in Storage.find("rss", selector):
+    for fnm, feed in find("rss", selector):
         if feed:
             feed.name = event.args[1]
-            Storage.save(feed, fnm)
+            save(feed, fnm)
     event.reply("ok")
 
 
@@ -326,17 +326,17 @@ def rem(event):
         event.reply("rem <stringinurl>")
         return
     selector = {"rss": event.args[0]}
-    for fnm, feed in Storage.find("rss", selector):
+    for fnm, feed in find("rss", selector):
         if feed:
             feed.__deleted__ = True
-            Storage.save(feed, fnm)
+            save(feed, fnm)
     event.reply("ok")
 
 
 def rss(event):
     if not event.rest:
         nrs = 0
-        for fnm, feed in Storage.find("rss"):
+        for fnm, feed in find("rss"):
             event.reply("%s %s %s" % (
                                    nrs,
                                    tostr(feed),
@@ -351,11 +351,11 @@ def rss(event):
     if "http" not in url:
         event.reply("i need an url")
         return
-    for _fn, res in Storage.find("rss", {"rss": url}):
+    for _fn, res in find("rss", {"rss": url}):
         if res:
             event.reply("already got %s" % url)
             return
     feed = Rss()
     feed.rss = event.args[0]
-    Storage.save(feed)
+    save(feed)
     event.reply("ok")

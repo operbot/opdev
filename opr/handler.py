@@ -8,8 +8,8 @@ import queue
 import threading
 
 
-from .command import Command
-from .objects import Object, update
+from opv.objects import Object, update
+from opr.command import Command
 
 
 def __dir__():

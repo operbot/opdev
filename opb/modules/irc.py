@@ -16,14 +16,14 @@ import threading
 import _thread
 
 
-from ..clients import Client
-from ..command import Command
-from ..default import Default
-from ..objects import Object, keys, tostr, update
-from ..message import Message
-from ..utility import elapsed, fntime, locked
-from ..threads import launch
-from ..storage import Storage
+from opr.clients import Client
+from opr.command import Command
+from opr.default import Default
+from opv.objects import Object, keys, tostr, update
+from opr.message import Message
+from opr.utility import elapsed, fntime, locked
+from opr.threads import launch
+from opr.storage import Storage, find, last, save
 
 
 def __dir__():
@@ -511,7 +511,7 @@ class IRC(Client, Output):
     def start(self):
         assert self.cfg.nick
         assert self.cfg.server
-        Storage.last(self.cfg)
+        last(self.cfg)
         if self.cfg.channel not in self.channels:
             self.channels.append(self.cfg.channel)
         self.connected.clear()
@@ -552,7 +552,7 @@ class Users(Object):
         for user in Users.get_users(origin):
             try:
                 user.perms.remove(perm)
-                Storage.save(user)
+                save(user)
                 res = True
             except ValueError:
                 pass
@@ -561,7 +561,7 @@ class Users(Object):
     @staticmethod
     def get_users(origin=""):
         selector = {"user": origin}
-        return Storage.find("user", selector)
+        return find("user", selector)
 
     @staticmethod
     def get_user(origin):
@@ -578,7 +578,7 @@ class Users(Object):
             raise NoUser(origin)
         if permission.upper() not in user.perms:
             user.perms.append(permission.upper())
-            Storage.save(user)
+            save(user)
         return user
 
 
@@ -594,7 +594,7 @@ class User(Object):
 
 def cfg(event):
     config = Config()
-    Storage.last(config)
+    last(config)
     if not event.sets:
         event.reply(tostr(
                           config,
@@ -603,7 +603,7 @@ def cfg(event):
                          )
     else:
         update(config, event.sets)
-        Storage.save(config)
+        save(config)
         event.reply("ok")
 
 
@@ -612,9 +612,9 @@ def dlt(event):
         event.reply("dlt <username>")
         return
     selector = {"user": event.args[0]}
-    for obj in Storage.find("user", selector):
+    for obj in find("user", selector):
         obj.__deleted__ = True
-        Storage.save(obj)
+        save(obj)
         event.reply("ok")
         break
 
@@ -622,7 +622,7 @@ def dlt(event):
 def met(event):
     if not event.args:
         nmr = 0
-        for obj in Storage.find("user"):
+        for obj in find("user"):
             event.reply("%s %s %s %s" % (
                                          nmr,
                                          obj.user,
@@ -636,7 +636,7 @@ def met(event):
     user = User()
     user.user = event.rest
     user.perms = ["USER"]
-    Storage.save(user)
+    save(user)
     event.reply("ok")
 
 

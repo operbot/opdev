@@ -7,9 +7,9 @@
 import time
 
 
-from ..storage import Storage
-from ..utility import elapsed, fntime
-from ..objects import Object
+from opr.storage import Storage
+from opr.utility import elapsed, fntime
+from opv.objects import Object
 
 
 def __dir__():

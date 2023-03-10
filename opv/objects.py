@@ -8,24 +8,48 @@ import uuid
 import _thread
 
 
+from functools import wraps
+
+
 def __dir__():
     return (
             'Object',
-            'format',
             'items',
             'keys',
-            'kind',
+            'otype',
             'oid',
             'search',
+            'tostr',
             'update',
             'values'
             )
 
 
-__all__ = __dir__()
-
-
 olock = _thread.allocate_lock()
+
+
+def locked(lock):
+
+    def lockeddec(func, *args, **kwargs):
+
+        if args or kwargs:
+            locked.noargs = True
+
+        @wraps(func)
+        def lockedfunc(*args, **kwargs):
+            lock.acquire()
+            res = None
+            try:
+                res = func(*args, **kwargs)
+            finally:
+                lock.release()
+            return res
+
+        lockeddec.__wrapped__ = func
+        lockeddec.__doc__ = func.__doc__
+        return lockedfunc
+
+    return lockeddec
 
 
 class Object:
@@ -54,7 +78,48 @@ class Object:
         return str(self.__dict__)
 
 
-def format(obj, args="", skip="", plain=False):
+def items(obj):
+    if isinstance(obj, type({})):
+        return obj.items()
+    return obj.__dict__.items()
+
+
+def keys(obj):
+    return obj.__dict__.keys()
+
+
+def oid(obj):
+    return os.path.join(
+                        otype(obj),
+                        str(uuid.uuid4().hex),
+                        os.sep.join(str(datetime.datetime.now()).split()),
+                       )
+
+
+def otype(obj, single=False):
+    kin = str(type(obj)).split()[-1][1:-2]
+    if kin == "type":
+        kin = obj.__name__
+    if single:
+        kin = kin.split(".")[-1]
+    return kin
+
+
+def search(obj, selector):
+    res = False
+    select = Object(selector)
+    for key, value in items(select):
+        try:
+            val = getattr(obj, key)
+        except AttributeError:
+            continue
+        if str(value) in str(val):
+            res = True
+            break
+    return res
+
+
+def tostr(obj, args="", skip="", plain=False):
     res = []
     keyz = []
     if "," in args:
@@ -84,47 +149,6 @@ def format(obj, args="", skip="", plain=False):
         res.append(txt)
     txt = " ".join(res)
     return txt.strip()
-
-
-def items(obj):
-    if isinstance(obj, type({})):
-        return obj.items()
-    return obj.__dict__.items()
-
-
-def keys(obj):
-    return obj.__dict__.keys()
-
-
-def kind(obj, single=False):
-    kin = str(type(obj)).split()[-1][1:-2]
-    if kin == "type":
-        kin = obj.__name__
-    if single:
-        kin = kin.split(".")[-1]
-    return kin
-
-
-def oid(obj):
-    return os.path.join(
-                        kind(obj),
-                        str(uuid.uuid4().hex),
-                        os.sep.join(str(datetime.datetime.now()).split()),
-                       )
-
-
-def search(obj, selector):
-    res = False
-    select = Object(selector)
-    for key, value in items(select):
-        try:
-            val = getattr(obj, key)
-        except AttributeError:
-            continue
-        if str(value) in str(val):
-            res = True
-            break
-    return res
 
 
 def update(obj, data):

@@ -7,8 +7,8 @@
 import inspect
 
 
-from .objects import Object
-from .message import Message
+from opv.objects import Object
+from opr.message import Message
 
 
 def __dir__():

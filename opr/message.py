@@ -1,9 +1,9 @@
 # This file is placed in the Public Domain.
 
 
-from .default import Default
-from .listens import Listens
-from .objects import Object
+from opv.objects import Object
+from opr.default import Default
+from opr.listens import Listens
 
 
 def __dir__():
