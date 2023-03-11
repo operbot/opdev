@@ -9,6 +9,7 @@ import os
 
 
 todos = [
+         "__all__",
          "__import__",
          "__main__",
          "__version__",
@@ -30,11 +31,10 @@ skip = [
         "check",
         "dev",
         "printable",
-        "bin/op"
        ]
 
 
-TXT  = "grep -s -R %s src"
+TXT  = "\ngrep -s -R %s\n"
 
 
 def doskip(txt):
@@ -47,6 +47,7 @@ def doskip(txt):
 def main():
     for todo in todos:
         greptxt = TXT % todo
+        print(greptxt)
         for line in os.popen(greptxt).readlines():
             try:
                 fnm, _liner = line.split(":")

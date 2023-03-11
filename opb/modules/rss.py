@@ -18,7 +18,7 @@ from urllib.request import Request, urlopen
 
 
 from opr.listens import Listens
-from opv.objects import Object, otype, tostr, update
+from opr.objects import Object, otype, tostr, update
 from opr.utility import fntime, locked
 from opr.threads import launch
 from opr.storage import Storage, find, last, save

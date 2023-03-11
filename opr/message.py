@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-from opv.objects import Object
+from opr.objects import Object
 from opr.default import Default
 from opr.listens import Listens
 

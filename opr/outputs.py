@@ -6,7 +6,7 @@ import textwrap
 import threading
 
 
-from opv.objects import Object
+from opr.objects import Object
 from opr.threads import launch
 
 

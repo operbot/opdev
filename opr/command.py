@@ -7,7 +7,7 @@
 import inspect
 
 
-from opv.objects import Object
+from opr.objects import Object
 from opr.message import Message
 
 

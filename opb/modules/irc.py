@@ -19,7 +19,7 @@ import _thread
 from opr.clients import Client
 from opr.command import Command
 from opr.default import Default
-from opv.objects import Object, keys, tostr, update
+from opr.objects import Object, keys, tostr, update
 from opr.message import Message
 from opr.utility import elapsed, fntime, locked
 from opr.threads import launch

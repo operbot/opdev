@@ -10,7 +10,7 @@ import time
 
 from opr.command import Command
 from opr.listens import Listens
-from opv.objects import Object, oid, update
+from opr.objects import Object, oid, update
 from opr.utility import elapsed
 
 

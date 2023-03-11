@@ -4,7 +4,7 @@
 import json
 
 
-from opv.objects import Object, locked, olock
+from opr.objects import Object, locked, olock
 
 
 def __dir__():
@@ -13,9 +13,6 @@ def __dir__():
             'dump',
             'dumps'
            ) 
-
-
-__all__ = __dir__()
 
 
 class ObjectEncoder(json.JSONEncoder):

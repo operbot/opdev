@@ -1,16 +1,13 @@
 # This file is placed in the Public Domain.
 
 
-from opv.objects import Object
+from opr.objects import Object
 
 
 def __dir__():
     return (
             "Default",
            ) 
-
-
-__all__ = __dir__()
 
 
 class Default(Object):

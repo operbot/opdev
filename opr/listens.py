@@ -4,7 +4,7 @@
 'listens'
 
 
-from opv.objects import Object
+from opr.objects import Object
 
 
 def __dir__():

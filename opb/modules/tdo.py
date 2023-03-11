@@ -9,7 +9,7 @@ import time
 
 from opr.storage import Storage
 from opr.utility import elapsed, fntime
-from opv.objects import Object
+from opr.objects import Object
 
 
 class Todo(Object):

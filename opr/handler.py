@@ -8,7 +8,7 @@ import queue
 import threading
 
 
-from opv.objects import Object, update
+from opr.objects import Object, update
 from opr.command import Command
 
 

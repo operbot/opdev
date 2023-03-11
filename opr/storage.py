@@ -10,9 +10,9 @@ import pathlib
 import _thread
 
 
-from opv.decoder import ObjectDecoder
-from opv.encoder import ObjectEncoder
-from opv.objects import Object, items, oid, otype, search, update
+from opr.decoder import ObjectDecoder
+from opr.encoder import ObjectEncoder
+from opr.objects import Object, items, oid, otype, search, update
 from opr.utility import fnclass, fntime, locked
 
 
