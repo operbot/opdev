@@ -21,7 +21,7 @@ from opr.command import Command, command, scan
 from opr.handler import Handler
 from opr.listens import Listens
 from opr.message import Message
-from opv.objects import update
+from opr.objects import update
 from opr.storage import Storage
 from opr.threads import launch
 from opr.utility import wait
